@@ -10,14 +10,6 @@ def create_table():
         """)
     conn.commit()
     
-    cursor.execute("""CREATE TABLE IF NOT EXISTS roles(
-                   id SERIAL PRIMARY KEY,
-                   role_name VARCHAR(40) NOT NULL UNIQUE,
-                   section_id INTEGER ,
-                   FOREIGN KEY (section_id) REFERENCES section(id))
-                   
-                   """)
-    conn.commit()
 
     cursor.execute(
         """CREATE TABLE IF NOT EXISTS disease(
@@ -39,9 +31,7 @@ def create_table():
                    doctor_id SERIAL PRIMARY KEY,
                    name VARCHAR(50) NOT NULL UNIQUE,
                    in_section INTEGER,
-                   role_id INTEGER,
-                   FOREIGN KEY (in_section) REFERENCES section(id),
-                   FOREIGN KEY (role_id) REFERENCES roles(id) )
+                   FOREIGN KEY (in_section) REFERENCES section(id))
             """)    
     conn.commit()
 
@@ -50,8 +40,6 @@ def create_table():
                    nurs_id SERIAL PRIMARY KEY,
                    name VARCHAR(50) NOT NULL UNIQUE,
                    in_section INTEGER,
-                   role_id INTEGER,
-                   FOREIGN KEY (role_id) REFERENCES roles(id),
                    FOREIGN KEY (in_section) REFERENCES section(id))"""
     )
     conn.commit()
@@ -61,9 +49,7 @@ def create_table():
         patient_id SERIAL PRIMARY KEY,
         name VARCHAR(50),
         in_section INTEGER,
-        role_id INTEGER,
         medication INTEGER,
-        FOREIGN KEY (role_id) REFERENCES roles(id),
         FOREIGN KEY (in_section) REFERENCES section(id),
         FOREIGN KEY (medication) REFERENCES medication(id))"""
     )
