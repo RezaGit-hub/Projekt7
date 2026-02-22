@@ -55,6 +55,16 @@ def create_table():
     )
     conn.commit()
 
+    
+    
+    cursor.execute(
+    """CREATE TABLE IF NOT EXISTS patient_disease(
+    patient_id INTEGER REFERENCES patient(patient_id) ON DELETE CASCADE,
+    disease_id INTEGER REFERENCES disease(id) ON DELETE CASCADE,
+    PRIMARY KEY (patient_id, disease_id))"""
+    )
+    conn.commit()
+
     cursor.close()
     conn.close()
 

@@ -1,4 +1,4 @@
-from app.models.models_query import insert_section, insert_doctor, insert_nurs, insert_medication, insert_patient, get_all_doctors, get_all_medication, get_all_patients, get_all_section
+from app.models.models_query import insert_section, insert_doctor, insert_nurs, insert_medication,disease_to_patient, insert_patient, get_all_doctors, get_all_medication, get_all_patients, get_all_section, insert_disease, get_patient_with_disease
 
 if __name__=="__main__":
     kinder_id = insert_section("Kinder")
@@ -14,6 +14,12 @@ if __name__=="__main__":
     p_jon_id = insert_patient("jon bullton", kinder_id, aspirin_id)
     p_alex_id = insert_patient("alex sosk", operation_id, ipoberofen_id)
     p_dennis_id = insert_patient("Dennnis Steffen", verbrand_id, aspirin_id )
+
+    gripp_id = insert_disease("Gripp")
+    covid_id = insert_disease("Covid 19")
+
+    disease_to_patient(p_alex_id, covid_id)
+    disease_to_patient(p_alex_id, gripp_id)
 
     print("Kinder ID:", kinder_id)
     print("Operation ID:", operation_id)
@@ -31,6 +37,11 @@ print("Patients:  ")
 patines = get_all_patients()
 for patien in patines:
     print(patien)
+
+print("patient with disease:  ")
+pat_dis = get_patient_with_disease()
+for patient in pat_dis:
+    print(patient)
 
 
 

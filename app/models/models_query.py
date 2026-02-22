@@ -103,6 +103,34 @@ def insert_patient(name, in_section, medication):
 
     return patient_id
 
+def insert_disease(name):
+    conn = get_connection()
+    cursor = conn.cursor()
+    cursor.execute(
+        """INSERT INTO disease(name) VALUES(%s)
+        ON CONFLICT(name)
+        DO UPDATE SET name = EXCLUDED.name
+        returning id""",
+        (name , ) 
+    )
+    disease_id = cursor.fetchone()[0]
+
+    conn.commit()
+    cursor.close()
+    conn.close()
+    return disease_id
+
+def disease_to_patient(patient_id, disease_id):
+    conn= get_connection()
+    cursor = conn.cursor()
+    cursor.execute(
+        """INSERT INTO patient_disease(patient_id, disease_id) VALUES (%s,%s) ON CONFLICT DO NOTHING""",
+        (patient_id, disease_id)
+    )
+    conn.commit()
+    cursor.close()
+    conn.close()
+
 
 def get_all_doctors():
     conn = get_connection()
@@ -145,3 +173,17 @@ def get_all_patients():
     cursor.close()
     conn.close()
     return patients
+
+def get_patient_with_disease():
+    conn = get_connection()
+    cursor = conn.cursor(cursor_factory=RealDictCursor)
+    cursor.execute(
+        """SELECT p.patient_id, p.name, d.name 
+        FROM patient p JOIN patient_disease pd ON p.patient_id = pd.patient_id
+        JOIN disease d on pd.disease_id = d.id"""
+    )
+
+    result = cursor.fetchall()
+    cursor.close()
+    conn.close()
+    return result
