@@ -5,7 +5,7 @@ def create_table():
     cursor = conn.cursor()
     cursor.execute("""CREATE TABLE IF NOT EXISTS section(
                    id SERIAL PRIMARY KEY,
-                   section_name VARCHAR NOT NULL)
+                   section_name VARCHAR NOT NULL UNIQUE)
 
         """)
     conn.commit()
@@ -22,7 +22,7 @@ def create_table():
     cursor.execute(
         """CREATE TABLE IF NOT EXISTS medication(
         id SERIAL PRIMARY KEY,
-        name VARCHAR(50))"""
+        name VARCHAR(50) NOT NULL UNIQUE)"""
     )
     conn.commit()
     
@@ -47,7 +47,7 @@ def create_table():
     cursor.execute(
         """CREATE TABLE IF NOT EXISTS patient(
         patient_id SERIAL PRIMARY KEY,
-        name VARCHAR(50),
+        name VARCHAR(50) NOT NULL UNIQUE,
         in_section INTEGER,
         medication INTEGER,
         FOREIGN KEY (in_section) REFERENCES section(id),
