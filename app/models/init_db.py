@@ -45,13 +45,13 @@ def create_table():
     conn.commit()
 
     cursor.execute(
-        """CREATE TABLE IF NOT EXISTS patient(
+        """CREATE TABLE patient(
         patient_id SERIAL PRIMARY KEY,
         name VARCHAR(50) NOT NULL UNIQUE,
-        in_section INTEGER,
-        medication INTEGER,
-        FOREIGN KEY (in_section) REFERENCES section(id),
-        FOREIGN KEY (medication) REFERENCES medication(id))"""
+        in_section INTEGER NOT NULL,
+        medication INTEGER NOT NULL,
+        CONSTRAINT fk_section FOREIGN KEY (in_section) REFERENCES section(id) ON DELETE CASCADE, 
+        CONSTRAINT fk-medication FOREIGN KEY (medication) REFERENCES medication(id) ON DELETE SET NULL)"""
     )
     conn.commit()
 
@@ -59,9 +59,11 @@ def create_table():
     
     cursor.execute(
     """CREATE TABLE IF NOT EXISTS patient_disease(
-    patient_id INTEGER REFERENCES patient(patient_id) ON DELETE CASCADE,
-    disease_id INTEGER REFERENCES disease(id) ON DELETE CASCADE,
-    PRIMARY KEY (patient_id, disease_id))"""
+    patient_id INTEGER,
+    disease_id INTEGER, 
+    PRIMARY KEY (patient_id, disease_id),
+    CONSTRAINT fk_patient FOREIGN KEY (patient_id) REFERENCES patient(patient_id) ON DELETE CASCADE,
+    CONSTRAINT fk_disease FOREIGN KEY (disease_id) REFERENCES disease(id) ON DELETE CASCADE)"""
     )
     conn.commit()
 
